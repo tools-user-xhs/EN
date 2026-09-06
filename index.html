@@ -1,0 +1,985 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌈 幼儿英文启蒙 · 互动资源库</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Segoe UI', 'Comic Sans MS', 'Chalkboard SE', cursive, sans-serif; }
+        body { background: linear-gradient(135deg, #fdf6ed 0%, #fce8d9 100%); min-height: 100vh; padding: 2rem 1.5rem; }
+        .container { max-width: 1500px; width: 100%; margin: 0 auto; background: rgba(255, 248, 240, 0.7); backdrop-filter: blur(4px); border-radius: 64px 64px 40px 40px; padding: 2.5rem 3rem 3rem; box-shadow: 0 20px 40px rgba(0, 0, 0, 0.06), 0 8px 24px rgba(255, 180, 120, 0.15); border: 2px solid #ffffffcc; }
+        h1 { font-size: 3.4rem; font-weight: 700; color: #d67a4a; text-shadow: 6px 6px 0 #fad2b0, 2px 2px 0 #ffffff; letter-spacing: 1px; display: flex; align-items: center; flex-wrap: wrap; justify-content: center; gap: 12px; margin-bottom: 0.3rem; }
+        h1 small { font-size: 1.2rem; background: #fbdec9; padding: 0.3rem 2rem; border-radius: 60px; color: #4f3322; text-shadow: none; box-shadow: inset 0 -3px 0 #b47a5a; letter-spacing: 1px; }
+        .subhead { text-align: center; font-size: 1.2rem; color: #6f4f38; background: #ffefe0; padding: 0.5rem 2.5rem; border-radius: 100px; display: inline-block; margin: 0 auto 2rem; border: 2px dashed #eeb48a; font-weight: 500; box-shadow: 0 4px 0 #dbaa80; }
+        .modules-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2rem; margin-top: 0.5rem; }
+        .module-card { background: #ffffffec; backdrop-filter: blur(4px); border-radius: 48px 48px 32px 32px; padding: 1.8rem 2rem 2rem; box-shadow: 0 10px 0 #dbb69b, 0 12px 24px -8px rgba(100, 70, 40, 0.12); transition: 0.2s ease; border: 3px solid white; display: flex; flex-direction: column; }
+        .module-card:hover { transform: scale(1.01) translateY(-5px); box-shadow: 0 16px 0 #ccaa8f, 0 20px 30px -8px #a68469; }
+        .card-header { display: flex; align-items: center; gap: 14px; margin-bottom: 1.2rem; border-bottom: 4px dotted #f7c9ae; padding-bottom: 0.6rem; }
+        .card-header .emoji-big { font-size: 2.8rem; line-height: 1; filter: drop-shadow(2px 4px 4px rgba(0,0,0,0.08)); }
+        .card-header h2 { font-size: 2rem; color: #3e2c1d; letter-spacing: -0.5px; font-weight: 700; text-shadow: 2px 2px 0 #fbe4d0; }
+        .module-content { flex: 1; color: #2f241b; }
+        .resource-section { background: #faf1e6; border-radius: 28px; padding: 1rem 1.2rem; margin: 0.6rem 0; border: 2px solid #fad2b0; }
+        .resource-section h4 { color: #4f3522; font-size: 1rem; display: flex; align-items: center; gap: 8px; margin-bottom: 8px; margin-top: 10px; }
+        .resource-section h4:first-of-type { margin-top: 0; }
+        .letter-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(44px, 1fr)); gap: 8px; margin: 8px 0; }
+        .letter-btn { background: #fbdec9; border: 3px solid white; border-radius: 20px; padding: 10px 0; font-size: 1.6rem; font-weight: 700; color: #4f3322; text-align: center; box-shadow: 0 4px 0 #cb9f81; cursor: pointer; transition: 0.1s ease; line-height: 1; }
+        .letter-btn:hover { transform: scale(1.05); background: #fad2b5; }
+        .letter-btn:active { transform: translateY(4px); box-shadow: 0 0px 0 #cb9f81; }
+        .letter-btn .mouth-shape { display: block; font-size: 0.65rem; color: #7f5a3e; font-weight: 400; }
+        .pronounce-hint { background: #fff3e6; border-radius: 40px; padding: 0.1rem 1.2rem; font-size: 0.85rem; color: #5f3f2a; display: inline-block; margin: 4px 0; border: 2px solid #fad2b0; }
+        .play-all-btn { background: #ffb082; border: none; border-radius: 40px; padding: 0.3rem 1.5rem; font-weight: 700; color: white; cursor: pointer; box-shadow: 0 4px 0 #b58263; transition: 0.1s; font-size: 0.95rem; }
+        .play-all-btn:hover { background: #f59a6a; transform: scale(1.02); }
+        .play-all-btn:active { transform: translateY(4px); box-shadow: 0 0px 0 #b58263; }
+        .toolbar-row { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; margin-bottom: 6px; }
+        .resource-tags { display: flex; flex-wrap: wrap; gap: 0.4rem 0.6rem; max-height: 200px; overflow-y: auto; padding: 4px 2px; }
+        .resource-tag { background: #ffe6d1; border-radius: 40px; padding: 0.15rem 0.9rem; font-weight: 600; color: #4f3322; box-shadow: 0 3px 0 #cb9f81; font-size: 0.8rem; border: 2px solid #fff6e8; cursor: pointer; transition: 0.1s; flex-shrink: 0; position: relative; }
+        .resource-tag:hover { background: #fadbc4; transform: scale(1.02); }
+        .resource-tag span { font-size: 1rem; margin-right: 4px; }
+        .word-explanation { display: none; background: #fffaf2; border-radius: 20px; padding: 0.4rem 1rem; margin: 4px 0 8px 0; border-left: 6px solid #f9b082; font-size: 0.9rem; color: #3d2c1d; border: 2px solid #fad2b0; }
+        .word-explanation.show { display: block; }
+        .sentence-list { display: flex; flex-direction: column; gap: 4px; padding: 2px 0; max-height: none; overflow: visible; }
+        .sentence-item { background: #fcf3e9; border-radius: 30px; padding: 0.4rem 1rem; border-left: 6px solid #f9b082; font-size: 0.85rem; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; cursor: pointer; transition: 0.1s; }
+        .sentence-item:hover { background: #f7e8da; }
+        .sentence-item .level-tag { background: #b5b8a3; color: white; border-radius: 30px; padding: 0.05rem 0.7rem; font-size: 0.6rem; font-weight: 700; white-space: nowrap; }
+        .sentence-item .level-tag.base { background: #b5b8a3; }
+        .sentence-item .level-tag.mid { background: #7fb3a3; }
+        .sentence-item .level-tag.high { background: #4f8b7a; }
+        .sentence-item .expl-tip { font-size: 0.7rem; color: #7f5a3e; background: #fff6e8; border-radius: 30px; padding: 0.05rem 0.7rem; white-space: nowrap; }
+        .sentence-item .sentence-text { font-weight: 600; color: #3e2c1d; }
+        .sentence-item .sentence-cn { font-size: 0.8rem; color: #7f5a3e; background: #f0ebe4; border-radius: 30px; padding: 0.05rem 0.8rem; }
+        .schedule-grid { display: flex; flex-direction: column; gap: 4px; max-height: 180px; overflow-y: auto; }
+        .schedule-row { background: #fcf3e9; border-radius: 30px; padding: 0.3rem 1rem; display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; border: 2px solid #fad2b0; gap: 4px; }
+        .schedule-row .time { background: #d7e0d8; padding: 0.05rem 0.8rem; border-radius: 30px; font-size: 0.7rem; font-weight: 600; color: #1d4033; }
+        .schedule-row .level-badge { background: #b5b8a3; color: white; padding: 0.05rem 0.7rem; border-radius: 30px; font-size: 0.65rem; font-weight: 700; }
+        .schedule-row .level-badge.base { background: #b5b8a3; }
+        .schedule-row .level-badge.mid { background: #7fb3a3; }
+        .schedule-row .level-badge.high { background: #4f8b7a; }
+        .schedule-row .title { font-weight: 600; color: #3e2c1d; flex: 1; min-width: 80px; cursor: pointer; }
+        .schedule-row .title:hover { color: #d67a4a; }
+        .module-footer { margin-top: 1.2rem; font-size: 0.9rem; background: #ffefe3; border-radius: 40px; padding: 0.4rem 1rem; text-align: center; color: #5e3f2b; border: 2px solid #f6cfb0; }
+        hr { border: 2px dashed #ffc8a2; margin: 2rem 0 0.5rem; opacity: 0.5; }
+        .footer-note { text-align: center; color: #7f624a; margin-top: 1.8rem; font-size: 1.1rem; background: #ffedd7; padding: 0.6rem; border-radius: 60px; border: 2px solid #ffbe91; }
+
+        /* 对话框样式 */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.4);
+            backdrop-filter: blur(3px);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-overlay.show { display: flex; }
+        .modal-box {
+            background: #fffdf9;
+            border-radius: 48px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            padding: 2rem 2.2rem 1.8rem;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3);
+            border: 4px solid #fad2b0;
+            position: relative;
+            overflow-y: auto;
+        }
+        .modal-box .modal-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #d67a4a;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .modal-box .modal-title .close-btn {
+            margin-left: auto;
+            background: #ffb082;
+            border: none;
+            border-radius: 40px;
+            padding: 0.2rem 1.2rem;
+            font-weight: 700;
+            color: white;
+            cursor: pointer;
+            font-size: 0.9rem;
+            box-shadow: 0 3px 0 #b58263;
+            transition: 0.1s;
+        }
+        .modal-box .modal-title .close-btn:hover { background: #f59a6a; transform: scale(1.02); }
+        .modal-box .modal-title .close-btn:active { transform: translateY(3px); box-shadow: 0 0px 0 #b58263; }
+        .modal-box .modal-body {
+            background: #fcf3e9;
+            border-radius: 24px;
+            padding: 1rem 1.2rem;
+            font-size: 1rem;
+            line-height: 1.7;
+            color: #3d2c1d;
+            border: 2px solid #fad2b0;
+            max-height: 50vh;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+        .modal-box .modal-body .label {
+            font-weight: 600;
+            color: #7f5a3e;
+        }
+
+        /* 微信提示 */
+        #browserTip {
+            background: #ff6b35;
+            color: white;
+            text-align: center;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+            display: none;
+            box-shadow: 0 4px 12px rgba(255,107,53,0.3);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        #browserTip .highlight {
+            font-weight: 700;
+            background: rgba(255,255,255,0.2);
+            padding: 0 8px;
+            border-radius: 4px;
+        }
+
+        /* 欢迎遮罩 */
+        #welcome-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.6);
+            backdrop-filter: blur(5px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+            flex-direction: column;
+            color: white;
+            text-align: center;
+            padding: 20px;
+            cursor: pointer;
+        }
+        #welcome-overlay .big-emoji { font-size: 4rem; margin-bottom: 1rem; }
+        #welcome-overlay .title { font-size: 2rem; font-weight: 700; margin-bottom: 0.5rem; }
+        #welcome-overlay .sub { font-size: 1.2rem; opacity: 0.9; }
+        #welcome-overlay .tap-hint { margin-top: 2rem; font-size: 1rem; background: rgba(255,255,255,0.2); padding: 0.5rem 1.5rem; border-radius: 40px; animation: pulse 1.5s infinite; }
+
+        @media (max-width: 1024px) { .modules-grid { grid-template-columns: 1fr; gap: 1.8rem; } }
+        @media (max-width: 700px) { h1 { font-size: 2.2rem; } .container { padding: 1.2rem; } .module-card { padding: 1rem; } .letter-grid { grid-template-columns: repeat(auto-fill, minmax(38px, 1fr)); } .resource-tags { max-height: 140px; } .schedule-grid { max-height: 140px; } .sentence-item { font-size: 0.8rem; } .modal-box { padding: 1.5rem; } }
+        .resource-tags::-webkit-scrollbar, .schedule-grid::-webkit-scrollbar, .modal-body::-webkit-scrollbar { width: 4px; }
+        .resource-tags::-webkit-scrollbar-track, .schedule-grid::-webkit-scrollbar-track, .modal-body::-webkit-scrollbar-track { background: #f5e6d8; border-radius: 10px; }
+        .resource-tags::-webkit-scrollbar-thumb, .schedule-grid::-webkit-scrollbar-thumb, .modal-body::-webkit-scrollbar-thumb { background: #dbb69b; border-radius: 10px; }
+    </style>
+</head>
+<body>
+    <!-- 欢迎遮罩 -->
+    <div id="welcome-overlay">
+        <div class="big-emoji">🧸</div>
+        <div class="title">英文启蒙 · 互动资源库</div>
+        <div class="sub">点击任意处开始 · 畅享语音学习</div>
+        <div class="tap-hint">👆 点击屏幕激活音频</div>
+    </div>
+
+    <!-- 页面主体 -->
+    <div class="container">
+        <!-- 微信提示 -->
+        <div id="browserTip">
+            🔊 当前微信内无法播放语音，请点击右上角 <span class="highlight">···</span> 选择 <span class="highlight">在浏览器中打开</span> 获得完整体验！
+        </div>
+
+        <h1>🧸 英文启蒙 · 互动资源库 <small>点击发音 · 分级句型</small></h1>
+        <div style="text-align: center;"><span class="subhead">🎈 字母自动播放 · 词汇400+ · 句型150+ · 音频计划</span></div>
+
+        <div class="modules-grid">
+            <!-- 模块1 -->
+            <div class="module-card">
+                <div class="card-header"><span class="emoji-big">🔤</span><h2>模块 1</h2></div>
+                <div class="module-content">
+                    <p>📚 字母发音 · 点击自动播放3次</p>
+                    <div class="resource-section">
+                        <div class="toolbar-row">
+                            <button class="play-all-btn" id="playAllLettersBtn">🔊 播放全部字母 (3次)</button>
+                            <span class="pronounce-hint" id="mouthDisplay">👄 口型: 点击字母</span>
+                        </div>
+                        <div class="letter-grid" id="letterGrid"></div>
+                    </div>
+                    <div class="module-footer" style="background: #ffdcc4;">👶 点击字母自动播放3次 · 跟读模仿</div>
+                </div>
+            </div>
+
+            <!-- 模块2 -->
+            <div class="module-card">
+                <div class="card-header"><span class="emoji-big">🍎</span><h2>模块 2</h2></div>
+                <div class="module-content">
+                    <p>🏠 日常词汇库 (每类100个 · 点击发音+解释)</p>
+                    <div class="resource-section">
+                        <h4>🍽️ 食物 & 饮品</h4>
+                        <div class="resource-tags" id="vocab-food"></div>
+                        <div class="word-explanation" id="expl-food"></div>
+                        <h4>🧸 玩具 & 生活</h4>
+                        <div class="resource-tags" id="vocab-toys"></div>
+                        <div class="word-explanation" id="expl-toys"></div>
+                        <h4>🐾 动物 & 自然</h4>
+                        <div class="resource-tags" id="vocab-animals"></div>
+                        <div class="word-explanation" id="expl-animals"></div>
+                        <h4>🏃 动作 & 身体</h4>
+                        <div class="resource-tags" id="vocab-actions"></div>
+                        <div class="word-explanation" id="expl-actions"></div>
+                        <p style="background: #fbeedc; border-left-color: #dbaa7a; margin-top: 8px;">🔍 点击单词发音 + 幼儿友好解释 · 实物配对</p>
+                    </div>
+                    <div class="module-footer" style="background: #ddede0;">🧩 词汇总量 400+ · 覆盖日常场景</div>
+                </div>
+            </div>
+
+            <!-- 模块3 -->
+            <div class="module-card">
+                <div class="card-header"><span class="emoji-big">🧩</span><h2>模块 3</h2></div>
+                <div class="module-content">
+                    <p>🗣️ 句型库 · 3-10岁 (共150句 · 点击发音 · 完整句子)</p>
+                    <div class="resource-section">
+                        <h4>📌 基础句型 (3-5岁) 50句 <span class="level-badge base">基础</span></h4>
+                        <div class="sentence-list" id="sentences-base"></div>
+                        <h4>📌 进阶句型 (5-7岁) 50句 <span class="level-badge mid">进阶</span></h4>
+                        <div class="sentence-list" id="sentences-mid"></div>
+                        <h4>📌 高阶句型 (7-10岁) 50句 <span class="level-badge high">高阶</span></h4>
+                        <div class="sentence-list" id="sentences-high"></div>
+                        <p style="background: #fef4e8; border-left-color: #e3a87b; margin-top: 8px;">✨ 点击句子发音 · 用模块2词汇替换 ____</p>
+                    </div>
+                    <div class="module-footer" style="background: #f6dec6;">🧸 从短句到复合句 · 螺旋上升</div>
+                </div>
+            </div>
+
+            <!-- 模块4 -->
+            <div class="module-card">
+                <div class="card-header"><span class="emoji-big">📋</span><h2>模块 4</h2></div>
+                <div class="module-content">
+                    <p>📅 每日执行计划 · 点击标题查看文字稿并播放</p>
+                    <div class="resource-section">
+                        <h4>🎧 每日听力计划</h4>
+                        <div class="schedule-grid" id="schedule-listening"></div>
+                        <h4>🎵 SSS儿歌计划</h4>
+                        <div class="schedule-grid" id="schedule-songs"></div>
+                        <h4>📺 动画计划</h4>
+                        <div class="schedule-grid" id="schedule-cartoons"></div>
+                        <p style="background: #fbeedc; border-left-color: #7fb3a3; margin-top: 8px;">⏳ 每日总时长 30-45分钟 · 点击标题查看文字稿</p>
+                    </div>
+                    <div class="module-footer" style="background: #dae5dc;">📌 每周复盘 · 按阶段进阶</div>
+                </div>
+            </div>
+        </div>
+
+        <hr>
+        <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 1rem; background: #feeedb; padding: 1.2rem 1.8rem; border-radius: 60px; margin: 1.5rem 0 0.2rem; border: 3px solid #ffdbb5;">
+            <div style="display: flex; align-items: center; gap: 8px;"><span style="font-size: 2rem;">⏰</span> <span style="font-weight: 600; color: #3f2f1f;">晨间 10min · 午间 10min · 晚间 15min</span></div>
+            <div style="display: flex; align-items: center; gap: 8px;"><span style="font-size: 2rem;">📌</span> <span style="color: #5b3f2b;">SSS儿歌 + 动画搭配听力 · 可重复</span></div>
+            <div style="display: flex; align-items: center; gap: 8px;"><span style="font-size: 2rem;">🎯</span> <span style="color: #5b3f2b;">每周复盘 · 按阶段进阶</span></div>
+        </div>
+        <div class="footer-note">🧸 点击字母/单词/句子/计划标题 均可发音 · 模块2词汇可填入模块3横线</div>
+    </div>
+
+    <!-- 对话框 -->
+    <div class="modal-overlay" id="modalOverlay">
+        <div class="modal-box">
+            <div class="modal-title">
+                <span>📄 文字稿</span>
+                <button class="close-btn" id="modalCloseBtn">✕ 关闭</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <span class="label">🎵 内容：</span><br>
+                <span id="modalText">正在加载...</span>
+            </div>
+        </div>
+    </div>
+
+    <script>
+    (function() {
+        // ========== 检测微信环境 ==========
+        function isWechat() {
+            return /MicroMessenger/i.test(navigator.userAgent);
+        }
+
+        // 显示微信提示
+        if (isWechat()) {
+            var tip = document.getElementById('browserTip');
+            if (tip) tip.style.display = 'block';
+        }
+
+        // ========== 音频播放核心 ==========
+        let currentUtterance = null;
+        let audioContext = null;
+
+        function speakText(text, times = 1, callback) {
+            if (window.speechSynthesis) {
+                window.speechSynthesis.cancel();
+            }
+            if (currentUtterance) {
+                currentUtterance = null;
+            }
+
+            try {
+                let count = 0;
+                function speak() {
+                    if (count >= times) {
+                        if (callback) callback();
+                        return;
+                    }
+                    const utterance = new SpeechSynthesisUtterance(text);
+                    utterance.lang = 'en-US';
+                    utterance.rate = 0.7;
+                    utterance.pitch = 1.1;
+                    currentUtterance = utterance;
+                    utterance.onend = function() {
+                        count++;
+                        currentUtterance = null;
+                        if (count < times) {
+                            setTimeout(speak, 300);
+                        } else {
+                            if (callback) callback();
+                        }
+                    };
+                    utterance.onerror = function(e) {
+                        console.warn('SpeechSynthesis error:', e);
+                        currentUtterance = null;
+                        count++;
+                        if (count < times) {
+                            setTimeout(speak, 300);
+                        } else {
+                            playFallbackBeep();
+                            showModal('🔊 语音合成失败，请确保您的浏览器支持并允许音频播放。\n\n您可以尝试：\n1. 使用 Chrome 或 Safari 浏览器\n2. 检查系统音量设置\n3. 点击页面其他区域重试');
+                            if (callback) callback();
+                        }
+                    };
+                    window.speechSynthesis.speak(utterance);
+                }
+                speak();
+            } catch (e) {
+                console.warn('SpeechSynthesis not available:', e);
+                playFallbackBeep();
+                showModal('🔊 您的浏览器不支持语音合成，请使用最新版 Chrome 或 Safari。');
+                if (callback) callback();
+            }
+        }
+
+        function playFallbackBeep() {
+            try {
+                if (!audioContext) {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                if (audioContext.state === 'suspended') {
+                    audioContext.resume();
+                }
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                oscillator.frequency.value = 800;
+                oscillator.type = 'sine';
+                gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + 0.3);
+            } catch(e) {
+                console.warn('Fallback audio failed:', e);
+            }
+        }
+
+        // ========== 欢迎遮罩 ==========
+        var welcomeOverlay = document.getElementById('welcome-overlay');
+        if (welcomeOverlay) {
+            welcomeOverlay.addEventListener('click', function() {
+                try {
+                    if (!audioContext) {
+                        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                    }
+                    if (audioContext.state === 'suspended') {
+                        audioContext.resume();
+                    }
+                } catch(e) {}
+                try {
+                    var silent = new SpeechSynthesisUtterance(' ');
+                    silent.volume = 0;
+                    window.speechSynthesis.speak(silent);
+                } catch(e) {}
+                this.style.display = 'none';
+            });
+        }
+
+        // ========== 对话框 ==========
+        var modalOverlay = document.getElementById('modalOverlay');
+        var modalText = document.getElementById('modalText');
+        var modalCloseBtn = document.getElementById('modalCloseBtn');
+
+        function showModal(text) {
+            if (!modalOverlay) return;
+            modalText.textContent = text;
+            modalOverlay.classList.add('show');
+        }
+
+        function hideModal() {
+            if (!modalOverlay) return;
+            modalOverlay.classList.remove('show');
+        }
+
+        if (modalCloseBtn) {
+            modalCloseBtn.addEventListener('click', hideModal);
+        }
+        if (modalOverlay) {
+            modalOverlay.addEventListener('click', function(e) {
+                if (e.target === this) hideModal();
+            });
+        }
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') hideModal();
+        });
+
+        // ========== 模块1：字母 (修复版 - 移除"Chapital"等前缀发音) ==========
+        function speakLetter(letter) {
+            // 取消当前播放
+            if (window.speechSynthesis) {
+                window.speechSynthesis.cancel();
+            }
+            if (currentUtterance) {
+                currentUtterance = null;
+            }
+
+            let count = 0;
+            function speak() {
+                if (count >= 3) return;
+                
+                // 创建一个新的 SpeechSynthesisUtterance 实例
+                const utterance = new SpeechSynthesisUtterance();
+                
+                // 核心修复：将字母作为独立文本，并添加微小的停顿，防止引擎连读
+                // 使用 ' ' + letter + ' ' 强制引擎将字母视为独立单元
+                utterance.text = ' ' + letter + ' ';
+                
+                // 设置语言为美式英语
+                utterance.lang = 'en-US';
+                
+                // 调整语速和音调，使其更清晰、更适合幼儿
+                utterance.rate = 0.6;   // 稍微放慢，让发音更清晰
+                utterance.pitch = 1.2;  // 稍微提高音调，更活泼
+                
+                // 存储当前播放的语音对象，以便后续取消
+                currentUtterance = utterance;
+                
+                // 播放结束后的回调
+                utterance.onend = function() {
+                    count++;
+                    currentUtterance = null;
+                    if (count < 3) {
+                        // 每两次播放之间增加一个短暂的延迟，让幼儿能听清
+                        setTimeout(speak, 500);
+                    }
+                };
+                
+                // 播放出错时的回调
+                utterance.onerror = function() {
+                    currentUtterance = null;
+                    // 如果出错，增加计数并尝试下一次
+                    count++;
+                    if (count < 3) {
+                        setTimeout(speak, 500);
+                    }
+                };
+                
+                // 开始播放语音
+                window.speechSynthesis.speak(utterance);
+            }
+            
+            // 开始第一次播放
+            speak();
+        }
+
+        var letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+        var mouthShapes = {
+            'A':'👄 张口 /æ/','B':'👄 双唇闭 /b/','C':'👄 张口 /k/ 或 /s/','D':'👄 舌尖上 /d/',
+            'E':'👄 微笑 /e/','F':'👄 下唇咬 /f/','G':'👄 软腭 /g/','H':'👄 呼气 /h/',
+            'I':'👄 微笑 /ɪ/','J':'👄 翘舌 /dʒ/','K':'👄 软腭 /k/','L':'👄 舌尖上 /l/',
+            'M':'👄 双唇闭 /m/','N':'👄 舌尖上 /n/','O':'👄 圆唇 /ɒ/','P':'👄 双唇闭 /p/',
+            'Q':'👄 圆唇 /kw/','R':'👄 卷舌 /r/','S':'👄 齿间 /s/','T':'👄 舌尖上 /t/',
+            'U':'👄 圆唇 /ʌ/','V':'👄 下唇咬 /v/','W':'👄 圆唇 /w/','X':'👄 齿间 /ks/',
+            'Y':'👄 微笑 /j/','Z':'👄 齿间 /z/'
+        };
+        var letterGrid = document.getElementById('letterGrid');
+        var mouthDisplay = document.getElementById('mouthDisplay');
+        letters.forEach(function(letter) {
+            var btn = document.createElement('div');
+            btn.className = 'letter-btn';
+            btn.innerHTML = letter + ' <span class="mouth-shape">👄</span>';
+            btn.addEventListener('click', function() {
+                speakLetter(letter);
+                mouthDisplay.textContent = mouthShapes[letter] || '👄 自然';
+                this.style.background = '#f5cba0';
+                setTimeout(function() { this.style.background = ''; }.bind(this), 300);
+            });
+            letterGrid.appendChild(btn);
+        });
+
+        document.getElementById('playAllLettersBtn').addEventListener('click', function() {
+            var idx = 0;
+            function playNext() {
+                if (idx >= letters.length) return;
+                var letter = letters[idx];
+                if (window.speechSynthesis) {
+                    window.speechSynthesis.cancel();
+                }
+                if (currentUtterance) {
+                    currentUtterance = null;
+                }
+                // 使用修复后的 speakLetter 逻辑，但只播放一次
+                let count = 0;
+                function speak() {
+                    if (count >= 1) {
+                        mouthDisplay.textContent = mouthShapes[letter] || '👄 自然';
+                        idx++;
+                        setTimeout(playNext, 400);
+                        return;
+                    }
+                    const utterance = new SpeechSynthesisUtterance(' ' + letter + ' ');
+                    utterance.lang = 'en-US';
+                    utterance.rate = 0.6;
+                    utterance.pitch = 1.2;
+                    currentUtterance = utterance;
+                    utterance.onend = function() {
+                        count++;
+                        currentUtterance = null;
+                        speak();
+                    };
+                    utterance.onerror = function() {
+                        currentUtterance = null;
+                        count++;
+                        speak();
+                    };
+                    window.speechSynthesis.speak(utterance);
+                }
+                speak();
+            }
+            playNext();
+        });
+
+        // ========== 模块2：词汇 ==========
+        var wordExplanations = {
+            'apple':'🍎 苹果，红红的、甜甜的，咬一口咔嚓脆！','banana':'🍌 香蕉，黄黄的、软软的，剥开皮就能吃！',
+            'bread':'🍞 面包，软软的、香香的，可以涂果酱吃！','milk':'🥛 牛奶，白白的、滑滑的，喝了长高高！',
+            'cheese':'🧀 奶酪，黄黄的、香香的，小老鼠最爱！','egg':'🥚 鸡蛋，圆圆的、滑滑的，可以煮着吃！',
+            'rice':'🍚 米饭，白白的、软软的，我们天天吃！','noodle':'🍜 面条，长长的、滑滑的，吸溜吸溜吃！',
+            'pizza':'🍕 披萨，圆圆的、好多 toppings，大家一起分享！','cake':'🎂 蛋糕，甜甜的、软软的，生日的时候吃！',
+            'cookie':'🍪 饼干，脆脆的、香香的，小手拿着吃！','juice':'🧃 果汁，甜甜的、凉凉的，喝一口好开心！',
+            'water':'💧 水，透明的、没有味道，但身体需要它！','meat':'🥩 肉，香香的、有营养，吃了有力气！',
+            'fish':'🐟 鱼，滑滑的、鲜鲜的，小猫最爱吃！','chicken':'🐔 鸡肉，白白的、嫩嫩的，可以炸着吃！',
+            'salad':'🥗 沙拉，好多蔬菜在一起，健康又好吃！','soup':'🥣 汤，热热的、暖暖的，喝下去好舒服！',
+            'sandwich':'🥪 三明治，两片面包夹着菜，拿着就能吃！','toast':'🍞 吐司，烤过的面包，脆脆的，抹黄油吃！',
+            'butter':'🧈 黄油，黄黄的、滑滑的，抹在面包上很香！','jam':'🍓 果酱，甜甜的、黏黏的，涂在面包上吃！',
+            'honey':'🍯 蜂蜜，金黄色的、甜甜的，蜜蜂酿的！','candy':'🍬 糖果，五颜六色的、甜甜的，但不能吃太多！',
+            'chocolate':'🍫 巧克力，棕色的、甜甜的，丝滑好吃！','ball':'⚽ 球，圆圆的、弹弹的，我们可以踢着玩！',
+            'car':'🚗 小汽车，有轮子，嘟嘟嘟，开起来好快！','doll':'🧸 玩偶，软软的、可爱的，可以抱着它！',
+            'robot':'🤖 机器人，会动会说话，好酷呀！','puzzle':'🧩 拼图，好多小片片，拼在一起变成图画！',
+            'book':'📚 书，里面有故事和图画，我们喜欢看！','crayon':'🖍️ 蜡笔，五颜六色的，可以在纸上画画！',
+            'scissors':'✂️ 剪刀，咔嚓咔嚓，可以剪纸！','balloon':'🎈 气球，圆圆的、鼓鼓的，可以飞上天！',
+            'kite':'🪁 风筝，有线牵着，可以在天上飞！','bicycle':'🚲 自行车，两个轮子，骑起来好快！',
+            'scooter':'🛴 滑板车，一只脚踩上去滑，好玩！','blocks':'🧱 积木，可以搭房子、搭城堡！',
+            'cards':'🃏 卡片，上面有图案，可以玩记忆游戏！','train':'🚂 火车，长长的，咔哒咔哒开过来！',
+            'plane':'✈️ 飞机，有翅膀，可以在天上飞！','boat':'🚢 船，可以在水上飘，我们去划船！',
+            'tent':'🎪 帐篷，可以住在里面，像露营一样！','flashlight':'🔦 手电筒，可以发光，照亮黑暗！',
+            'piano':'🎹 钢琴，按下去会发出美妙的声音！','drum':'🥁 鼓，咚咚咚，敲起来好有节奏！',
+            'guitar':'🎸 吉他，拨动琴弦，弹出好听的音乐！','phone':'📱 电话，可以给远方的朋友打电话！',
+            'watch':'⌚ 手表，戴在手上，可以看时间！','key':'🔑 钥匙，可以开门，要保管好！',
+            'dog':'🐶 小狗，汪汪叫，是人类的好朋友！','cat':'🐱 小猫，喵喵叫，喜欢抓老鼠！',
+            'bird':'🐦 小鸟，叽叽喳喳，可以在天上飞！','frog':'🐸 青蛙，绿色的，会跳，还会呱呱叫！',
+            'lion':'🦁 狮子，森林之王，吼声好响亮！','tiger':'🐯 老虎，身上有条纹，很威风！',
+            'bear':'🐻 大熊，毛茸茸的，喜欢吃蜂蜜！','panda':'🐼 熊猫，黑白色的，圆圆的，好可爱！',
+            'koala':'🐨 考拉，灰色的，抱着树睡觉！','kangaroo':'🦘 袋鼠，跳得很高，胸前有口袋！',
+            'fox':'🦊 狐狸，橙色的，尾巴蓬松，很聪明！','wolf':'🐺 狼，灰色的，嚎叫声很响亮！',
+            'rabbit':'🐰 兔子，长长的耳朵，一蹦一跳！','mouse':'🐭 小老鼠，小小的，爱吃奶酪！',
+            'squirrel':'🐿️ 松鼠，拖着蓬松的大尾巴，爱吃坚果！','hedgehog':'🦔 刺猬，背上有刺，遇到危险会蜷起来！',
+            'bat':'🦇 蝙蝠，有翅膀，晚上才出来！','penguin':'🐧 企鹅，穿着黑色燕尾服，走路摇摇摆摆！',
+            'eagle':'🦅 老鹰，飞得很高，眼睛很锐利！','duck':'🦆 鸭子，嘎嘎叫，喜欢在水里游！',
+            'chick':'🐥 小鸡，黄色的，毛茸茸，叽叽叫！','snail':'🐌 蜗牛，背着重重的壳，慢慢爬！',
+            'butterfly':'🦋 蝴蝶，翅膀五颜六色，在花丛中飞舞！','bee':'🐝 蜜蜂，嗡嗡嗡，会采花蜜！',
+            'run':'🏃 跑，双腿快速交替，像风一样！','walk':'🚶 走，一步一步，稳稳当当！',
+            'jump':'🦘 跳，双脚离地，蹦起来！','sit':'🧘 坐，屁股着地，身体放松！',
+            'stand':'🙌 站，双脚着地，身体直立！','clap':'👏 拍手，两只手拍在一起，发出声音！',
+            'wave':'👋 挥手，摇动手臂，打招呼！','turn':'🔄 转身，身体转一圈！',
+            'up':'⬆️ 上，往高处走！','down':'⬇️ 下，往低处走！',
+            'high five':'🖐️ 击掌，手掌对拍，表示庆祝！','hug':'🤗 拥抱，用双手抱住别人！',
+            'smile':'😊 微笑，嘴角上扬，表示开心！','cry':'😢 哭，眼睛流泪，表示伤心！',
+            'look':'👀 看，用眼睛观察！','listen':'👂 听，用耳朵接收声音！',
+            'touch':'🖐️ 触摸，用手感受！','smell':'👃 闻，用鼻子嗅！',
+            'taste':'👅 尝，用舌头感受味道！','give':'🤲 给，把东西递给别人！',
+            'take':'🙏 拿，用手接住东西！','open':'🔄 打开，让东西露出来！',
+            'close':'🚪 关闭，把东西合上！','sleep':'🛏️ 睡觉，闭上眼睛休息！',
+            'eat':'🍽️ 吃，把食物放进嘴里！','drink':'🥤 喝，把水或饮料喝下去！',
+            'carry':'🎒 搬运，用手拿着或背着！','put':'📦 放，把东西放在某个地方！',
+            'throw':'🤾 扔，把东西抛出去！','catch':'🤲 接，用手接住抛来的东西！'
+        };
+
+        function getExplanation(word) {
+            var clean = word.replace(/[^\w\s]/g, '').trim().toLowerCase();
+            return wordExplanations[clean] || '👶 ' + clean + ' 是一个英文单词，我们一起来认识它吧！';
+        }
+
+        function generateVocabList(baseWords, count) {
+            count = count || 100;
+            var list = [];
+            var emojis = ['🍎','🍌','🍇','🍊','🍓','🍉','🍑','🍒','🥝','🍋','🍍','🥭','🍞','🧀','🥛','🧃','🍪','🍩','🥐','🍔','🍟','🍕','🥗','🍣','🍜','🥟','🍚','🥚','🥓','🧇','🧸','🚗','🚀','🧩','🎨','📚','✂️','🎈','🪁','⚽','🏀','🧸','🤖','🚲','🛴','🎮','🃏','🧱','🎵','🪆','🏠','🚂','✈️','🚢','🛶','🎪','🔦','🐶','🐱','🐦','🐟','🐸','🐘','🦒','🦁','🐯','🐻','🐼','🐨','🦘','🦊','🐺','🐰','🐹','🐭','🐿️','🦔','🦇','🐧','🦅','🦆','🐥','🐌','🐞','🦋','🐝','🐙','🦑','🐚','🌳','☀️','🌙','🏃','🚶','🦘','🧘','🙌','👋','👏','🤸','🔄','⬆️','⬇️','🖐️','🤗','😊','😢','😡','👀','👂','🖐️','👃','👅','🤲','🙏','🔄','🛏️','🍽️','🥤','🎒','📦'];
+            for (var i = 0; i < count; i++) {
+                var base = baseWords[i % baseWords.length];
+                var emoji = emojis[i % emojis.length];
+                list.push(emoji + ' ' + base);
+            }
+            return list;
+        }
+
+        var baseFood = ['apple','banana','bread','milk','cheese','egg','rice','noodle','pizza','cake','cookie','juice','water','meat','fish','chicken','salad','soup','sandwich','toast','butter','jam','honey','candy','chocolate'];
+        var baseToys = ['ball','car','doll','robot','puzzle','book','crayon','scissors','balloon','kite','bicycle','scooter','blocks','cards','train','plane','boat','tent','flashlight','piano','drum','guitar','phone','watch','key'];
+        var baseAnimals = ['dog','cat','bird','fish','frog','lion','tiger','bear','panda','koala','kangaroo','fox','wolf','rabbit','mouse','squirrel','hedgehog','bat','penguin','eagle','duck','chick','snail','butterfly','bee'];
+        var baseActions = ['run','walk','jump','sit','stand','clap','wave','turn','up','down','high five','hug','smile','cry','look','listen','touch','smell','taste','give','take','open','close','sleep','eat','drink','carry','put','throw','catch'];
+
+        function renderVocab(id, explId, baseArr) {
+            var container = document.getElementById(id);
+            var explContainer = document.getElementById(explId);
+            if (!container || !explContainer) return;
+            var list = generateVocabList(baseArr, 100);
+            container.innerHTML = '';
+            explContainer.innerHTML = '';
+            explContainer.classList.remove('show');
+            list.forEach(function(word) {
+                var tag = document.createElement('span');
+                tag.className = 'resource-tag';
+                tag.textContent = word;
+                tag.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    var clean = word.replace(/[^\w\s]/g, '').trim();
+                    speakText(clean, 1);
+                    var expl = getExplanation(clean);
+                    explContainer.textContent = '💡 ' + expl;
+                    explContainer.classList.add('show');
+                    this.style.background = '#f5cba0';
+                    setTimeout(function() { this.style.background = ''; }.bind(this), 300);
+                });
+                container.appendChild(tag);
+            });
+        }
+
+        renderVocab('vocab-food', 'expl-food', baseFood);
+        renderVocab('vocab-toys', 'expl-toys', baseToys);
+        renderVocab('vocab-animals', 'expl-animals', baseAnimals);
+        renderVocab('vocab-actions', 'expl-actions', baseActions);
+
+        // ========== 模块3：句型 ==========
+        var basePatterns = [
+            { text:'I like ____.', example:'I like apples.', cn:'我喜欢苹果。' },
+            { text:'I see ____.', example:'I see a dog.', cn:'我看到一只狗。' },
+            { text:'This is ____.', example:'This is a book.', cn:'这是一本书。' },
+            { text:'I want ____.', example:'I want milk.', cn:'我想要牛奶。' },
+            { text:'I have ____.', example:'I have a car.', cn:'我有一辆小汽车。' },
+            { text:'It is a ____.', example:'It is a cat.', cn:'它是一只猫。' },
+            { text:'I am ____.', example:'I am happy.', cn:'我很快乐。' },
+            { text:'I can ____.', example:'I can run.', cn:'我会跑步。' },
+            { text:'Look at ____.', example:'Look at the bird.', cn:'看那只鸟。' },
+            { text:'Here is ____.', example:'Here is a ball.', cn:'这儿有一个球。' },
+            { text:'I love ____.', example:'I love my mom.', cn:'我爱我的妈妈。' },
+            { text:'I need ____.', example:'I need water.', cn:'我需要水。' },
+            { text:'I feel ____.', example:'I feel tired.', cn:'我感到累了。' },
+            { text:'I see a ____.', example:'I see a cat.', cn:'我看到一只猫。' },
+            { text:'I have a ____.', example:'I have a ball.', cn:'我有一个球。' },
+            { text:'This is my ____.', example:'This is my book.', cn:'这是我的书。' },
+            { text:'That is ____.', example:'That is a tree.', cn:'那是一棵树。' },
+            { text:'Where is ____?', example:'Where is my toy?', cn:'我的玩具在哪里？' },
+            { text:'What is ____?', example:'What is this?', cn:'这是什么？' },
+            { text:'Who is ____?', example:'Who is she?', cn:'她是谁？' },
+            { text:'I am a ____.', example:'I am a boy.', cn:'我是一个男孩。' },
+            { text:'You are ____.', example:'You are my friend.', cn:'你是我的朋友。' },
+            { text:'We are ____.', example:'We are happy.', cn:'我们很开心。' },
+            { text:'They are ____.', example:'They are playing.', cn:'他们正在玩。' },
+            { text:'It is ____.', example:'It is sunny.', cn:'天气晴朗。' },
+            { text:'I go to ____.', example:'I go to school.', cn:'我去学校。' },
+            { text:'I come from ____.', example:'I come from China.', cn:'我来自中国。' },
+            { text:'I live in ____.', example:'I live in a house.', cn:'我住在一所房子里。' },
+            { text:'I play with ____.', example:'I play with my friends.', cn:'我和朋友们一起玩。' },
+            { text:'I talk to ____.', example:'I talk to my dad.', cn:'我和爸爸说话。' },
+            { text:'I listen to ____.', example:'I listen to music.', cn:'我听音乐。' },
+            { text:'I look at ____.', example:'I look at the sky.', cn:'我看着天空。' },
+            { text:'I wait for ____.', example:'I wait for you.', cn:'我等你。' },
+            { text:'I ask for ____.', example:'I ask for help.', cn:'我请求帮助。' },
+            { text:'I thank ____.', example:'I thank you.', cn:'我感谢你。' },
+            { text:'I help ____.', example:'I help my mom.', cn:'我帮助妈妈。' },
+            { text:'I love my ____.', example:'I love my dog.', cn:'我爱我的狗。' },
+            { text:'I like my ____.', example:'I like my house.', cn:'我喜欢我的房子。' },
+            { text:'I want my ____.', example:'I want my ball.', cn:'我想要我的球。' },
+            { text:'I see my ____.', example:'I see my book.', cn:'我看到我的书。' },
+            { text:'I have my ____.', example:'I have my bag.', cn:'我有我的包。' },
+            { text:'This is a ____.', example:'This is a big apple.', cn:'这是一个大苹果。' },
+            { text:'That is a ____.', example:'That is a small dog.', cn:'那是一只小狗。' },
+            { text:'It is a big ____.', example:'It is a big car.', cn:'它是一辆大汽车。' },
+            { text:'It is a small ____.', example:'It is a small bird.', cn:'它是一只小鸟。' },
+            { text:'It is a nice ____.', example:'It is a nice day.', cn:'今天天气真好。' },
+            { text:'It is a good ____.', example:'It is a good boy.', cn:'他是一个好男孩。' },
+            { text:'It is a bad ____.', example:'It is a bad day.', cn:'今天是个糟糕的日子。' },
+            { text:'It is a new ____.', example:'It is a new toy.', cn:'这是一个新玩具。' },
+            { text:'It is an old ____.', example:'It is an old tree.', cn:'这是一棵老树。' }
+        ];
+
+        var midPatterns = [
+            { text:'I like ____ing ____.', example:'I like eating apples.', cn:'我喜欢吃苹果。' },
+            { text:'I am ____ing ____.', example:'I am reading a book.', cn:'我正在读一本书。' },
+            { text:'The ____ is ____.', example:'The apple is red.', cn:'苹果是红色的。' },
+            { text:'I want to ____.', example:'I want to eat cake.', cn:'我想吃蛋糕。' },
+            { text:'Can I have ____?', example:'Can I have some milk?', cn:'我能喝点牛奶吗？' },
+            { text:'Let\'s ____.', example:'Let\'s play together.', cn:'让我们一起玩吧。' },
+            { text:'I have a ____.', example:'I have a big dog.', cn:'我有一只大狗。' },
+            { text:'This is my ____.', example:'This is my favorite toy.', cn:'这是我心爱的玩具。' },
+            { text:'I see a ____.', example:'I see a beautiful bird.', cn:'我看到一只美丽的鸟。' },
+            { text:'The ____ is on/in ____.', example:'The book is on the table.', cn:'书在桌子上。' },
+            { text:'I am going to ____.', example:'I am going to the park.', cn:'我打算去公园。' },
+            { text:'I need to ____.', example:'I need to drink water.', cn:'我需要喝水。' },
+            { text:'I like to ____.', example:'I like to sing songs.', cn:'我喜欢唱歌。' },
+            { text:'I want to eat ____.', example:'I want to eat a pizza.', cn:'我想吃披萨。' },
+            { text:'I want to drink ____.', example:'I want to drink juice.', cn:'我想喝果汁。' },
+            { text:'I want to play ____.', example:'I want to play with my friends.', cn:'我想和朋友们一起玩。' },
+            { text:'I want to read ____.', example:'I want to read a story.', cn:'我想读一个故事。' },
+            { text:'I want to write ____.', example:'I want to write a letter.', cn:'我想写一封信。' },
+            { text:'I want to draw ____.', example:'I want to draw a picture.', cn:'我想画一幅画。' },
+            { text:'I want to sing ____.', example:'I want to sing a song.', cn:'我想唱一首歌。' },
+            { text:'I want to dance ____.', example:'I want to dance happily.', cn:'我想开心地跳舞。' },
+            { text:'I want to run ____.', example:'I want to run in the park.', cn:'我想在公园里跑步。' },
+            { text:'I want to jump ____.', example:'I want to jump high.', cn:'我想跳得高。' },
+            { text:'I want to sleep ____.', example:'I want to sleep early.', cn:'我想早点睡觉。' },
+            { text:'I want to wake up ____.', example:'I want to wake up early.', cn:'我想早点醒来。' },
+            { text:'I want to go home ____.', example:'I want to go home now.', cn:'我想现在回家。' },
+            { text:'I want to go out ____.', example:'I want to go out to play.', cn:'我想出去玩。' },
+            { text:'I want to go in ____.', example:'I want to go in the house.', cn:'我想进房子。' },
+            { text:'I want to go up ____.', example:'I want to go up the stairs.', cn:'我想上楼。' },
+            { text:'I want to go down ____.', example:'I want to go down the slide.', cn:'我想滑下滑梯。' },
+            { text:'I am happy because ____.', example:'I am happy because I got a gift.', cn:'我很开心因为我收到了一份礼物。' },
+            { text:'I am sad because ____.', example:'I am sad because I lost my toy.', cn:'我很伤心因为我丢了玩具。' },
+            { text:'I am tired because ____.', example:'I am tired because I played all day.', cn:'我累了因为玩了一整天。' },
+            { text:'I am hungry because ____.', example:'I am hungry because I didn\'t eat.', cn:'我饿了因为没吃东西。' },
+            { text:'I am thirsty because ____.', example:'I am thirsty because I ran a lot.', cn:'我渴了因为我跑了很多。' },
+            { text:'I am excited because ____.', example:'I am excited because we are going to the zoo.', cn:'我很兴奋因为我们要去动物园。' },
+            { text:'I am scared because ____.', example:'I am scared because it is dark.', cn:'我害怕因为天黑了。' },
+            { text:'I am angry because ____.', example:'I am angry because he took my toy.', cn:'我生气因为他拿走了我的玩具。' },
+            { text:'I am surprised because ____.', example:'I am surprised because I got a cake.', cn:'我很惊讶因为我得到了一个蛋糕。' },
+            { text:'I am proud because ____.', example:'I am proud because I did it myself.', cn:'我很骄傲因为我自己做到了。' },
+            { text:'I can see ____.', example:'I can see the moon.', cn:'我能看到月亮。' },
+            { text:'I can hear ____.', example:'I can hear the birds.', cn:'我能听到鸟叫。' },
+            { text:'I can smell ____.', example:'I can smell the flowers.', cn:'我能闻到花香。' },
+            { text:'I can taste ____.', example:'I can taste the soup.', cn:'我能尝到汤的味道。' },
+            { text:'I can touch ____.', example:'I can touch the soft cat.', cn:'我能摸到柔软的猫。' },
+            { text:'I can feel ____.', example:'I can feel happy.', cn:'我感觉快乐。' },
+            { text:'I can think ____.', example:'I can think about you.', cn:'我能想起你。' },
+            { text:'I can believe ____.', example:'I can believe in myself.', cn:'我能相信自己。' },
+            { text:'I can imagine ____.', example:'I can imagine a big castle.', cn:'我能想象一个大城堡。' },
+            { text:'I can remember ____.', example:'I can remember my first day.', cn:'我能记得我的第一天。' }
+        ];
+
+        var highPatterns = [
+            { text:'I like ____ more than ____.', example:'I like apples more than bananas.', cn:'比起香蕉我更喜欢苹果。' },
+            { text:'The ____ is ____ and ____.', example:'The cat is small and cute.', cn:'这只猫又小又可爱。' },
+            { text:'I am ____ing ____ now.', example:'I am doing my homework now.', cn:'我正在做作业。' },
+            { text:'I want to ____ with you.', example:'I want to go to the park with you.', cn:'我想和你一起去公园。' },
+            { text:'Can you ____ for me?', example:'Can you open the door for me?', cn:'你能帮我开门吗？' },
+            { text:'I think it is ____.', example:'I think it is a good idea.', cn:'我认为这是个好主意。' },
+            { text:'Let\'s go to ____.', example:'Let\'s go to the zoo.', cn:'我们去动物园吧。' },
+            { text:'I have ____ and ____.', example:'I have a dog and a cat.', cn:'我有一只狗和一只猫。' },
+            { text:'This is my favorite ____.', example:'This is my favorite book.', cn:'这是我最喜欢的书。' },
+            { text:'I like to ____ every day.', example:'I like to read a book every day.', cn:'我每天喜欢读书。' },
+            { text:'I like ____ better than ____.', example:'I like pizza better than hamburgers.', cn:'比起汉堡我更喜欢披萨。' },
+            { text:'I would like to ____.', example:'I would like to travel to the moon.', cn:'我想去月球旅行。' },
+            { text:'I am able to ____.', example:'I am able to speak English.', cn:'我会说英语。' },
+            { text:'I am willing to ____.', example:'I am willing to help you.', cn:'我愿意帮助你。' },
+            { text:'I am ready to ____.', example:'I am ready to go to school.', cn:'我准备好去上学了。' },
+            { text:'I am supposed to ____.', example:'I am supposed to clean my room.', cn:'我应该打扫我的房间。' },
+            { text:'I am allowed to ____.', example:'I am allowed to watch TV.', cn:'我被允许看电视。' },
+            { text:'I am expected to ____.', example:'I am expected to finish my homework.', cn:'我被期望完成作业。' },
+            { text:'I am planning to ____.', example:'I am planning to visit my grandma.', cn:'我计划去看望奶奶。' },
+            { text:'I am trying to ____.', example:'I am trying to learn to swim.', cn:'我正在尝试学游泳。' },
+            { text:'I am learning to ____.', example:'I am learning to play the piano.', cn:'我正在学弹钢琴。' },
+            { text:'I am teaching ____.', example:'I am teaching my sister.', cn:'我正在教我的妹妹。' },
+            { text:'I am showing ____.', example:'I am showing my new toy.', cn:'我正在展示我的新玩具。' },
+            { text:'I am telling ____.', example:'I am telling a story.', cn:'我正在讲一个故事。' },
+            { text:'I am asking ____.', example:'I am asking a question.', cn:'我正在问一个问题。' },
+            { text:'I am answering ____.', example:'I am answering the phone.', cn:'我正在接电话。' },
+            { text:'I am explaining ____.', example:'I am explaining the rules.', cn:'我正在解释规则。' },
+            { text:'I am describing ____.', example:'I am describing my family.', cn:'我正在描述我的家人。' },
+            { text:'I am comparing ____.', example:'I am comparing these two books.', cn:'我正在比较这两本书。' },
+            { text:'I am contrasting ____.', example:'I am contrasting day and night.', cn:'我正在对比白天和黑夜。' },
+            { text:'I am choosing ____.', example:'I am choosing a gift.', cn:'我正在挑选礼物。' },
+            { text:'I am deciding ____.', example:'I am deciding what to eat.', cn:'我正在决定吃什么。' },
+            { text:'I am preferring ____.', example:'I am preferring summer to winter.', cn:'比起冬天我更喜欢夏天。' },
+            { text:'I am enjoying ____.', example:'I am enjoying the party.', cn:'我很享受这个派对。' },
+            { text:'I am disliking ____.', example:'I am disliking the noise.', cn:'我不喜欢噪音。' },
+            { text:'I am hating ____.', example:'I am hating the rainy day.', cn:'我讨厌下雨天。' },
+            { text:'I am loving ____.', example:'I am loving this ice cream.', cn:'我非常喜欢这个冰淇淋。' },
+            { text:'I am caring about ____.', example:'I am caring about the environment.', cn:'我在乎环境。' },
+            { text:'I am worrying about ____.', example:'I am worrying about my test.', cn:'我在担心我的考试。' },
+            { text:'I am thinking about ____.', example:'I am thinking about my future.', cn:'我在思考我的未来。' },
+            { text:'I am talking about ____.', example:'I am talking about my hobby.', cn:'我在谈论我的爱好。' },
+            { text:'I am dreaming about ____.', example:'I am dreaming about becoming a doctor.', cn:'我梦想成为一名医生。' },
+            { text:'I am hoping for ____.', example:'I am hoping for a sunny day.', cn:'我希望有个晴天。' },
+            { text:'I am wishing for ____.', example:'I am wishing for a new bike.', cn:'我许愿要一辆新自行车。' },
+            { text:'I am waiting for ____.', example:'I am waiting for the bus.', cn:'我在等公交车。' },
+            { text:'I am looking for ____.', example:'I am looking for my key.', cn:'我在找我的钥匙。' },
+            { text:'I am asking for ____.', example:'I am asking for some help.', cn:'我在请求一些帮助。' },
+            { text:'I am paying for ____.', example:'I am paying for the dinner.', cn:'我在付晚餐的钱。' },
+            { text:'I am preparing for ____.', example:'I am preparing for the exam.', cn:'我在准备考试。' },
+            { text:'I am studying for ____.', example:'I am studying for my test.', cn:'我在为考试学习。' }
+        ];
+
+        function generateUniqueSentences(patterns, count) {
+            count = count || 50;
+            var uniqueSet = new Set();
+            var result = [];
+            for (var i = 0; i < patterns.length; i++) {
+                var p = patterns[i];
+                var key = p.text;
+                if (!uniqueSet.has(key)) {
+                    uniqueSet.add(key);
+                    result.push({ text: p.text, example: p.example || 'something', cn: p.cn || '...' });
+                }
+            }
+            var idx = 0;
+            while (result.length < count) {
+                var p = patterns[idx % patterns.length];
+                var key = p.text;
+                if (!uniqueSet.has(key)) {
+                    uniqueSet.add(key);
+                    result.push({ text: p.text, example: p.example || 'something', cn: p.cn || '...' });
+                }
+                idx++;
+            }
+            return result;
+        }
+
+        function renderSentences(containerId, patterns, levelClass) {
+            var container = document.getElementById(containerId);
+            if (!container) return;
+            var list = generateUniqueSentences(patterns, 50);
+            container.innerHTML = '';
+            list.forEach(function(item) {
+                var div = document.createElement('div');
+                div.className = 'sentence-item';
+                var displayText = item.example;
+                div.innerHTML = '<span class="sentence-text">' + displayText + '</span><span class="level-tag ' + levelClass + '">' + (levelClass === 'base' ? '基础' : levelClass === 'mid' ? '进阶' : '高阶') + '</span><span class="sentence-cn">' + item.cn + '</span><span class="expl-tip">💡 替换 ____</span>';
+                div.addEventListener('click', function(e) {
+                    if (e.target.closest('.expl-tip')) return;
+                    speakText(displayText, 1);
+                });
+                container.appendChild(div);
+            });
+        }
+
+        renderSentences('sentences-base', basePatterns, 'base');
+        renderSentences('sentences-mid', midPatterns, 'mid');
+        renderSentences('sentences-high', highPatterns, 'high');
+
+        // ========== 模块4：计划 ==========
+        var songLyrics = {
+            'Hello Hello!': 'Hello hello, can you clap your hands? Hello hello, can you stomp your feet? Hello hello, can you clap your hands? Hello hello, can you stomp your feet?',
+            'One Little Finger': 'One little finger, one little finger, tap tap tap! Point to the ceiling, point to the floor. Put it on your head. One little finger, one little finger, tap tap tap!',
+            'Walking Walking': 'Walking walking, walking walking, hop hop hop, hop hop hop, running running running, running running running, now let\'s stop. Now let\'s stop.',
+            'If You\'re Happy': 'If you\'re happy and you know it, clap your hands. If you\'re happy and you know it, stomp your feet. If you\'re happy and you know it, shout hurray. If you\'re happy and you know it, do all three.',
+            'The Wheels on the Bus': 'The wheels on the bus go round and round, round and round, round and round. The wheels on the bus go round and round, all through the town. The wipers on the bus go swish swish swish... The horn on the bus goes beep beep beep...',
+            'Do You Like Broccoli?': 'Do you like broccoli? Yes I do! Do you like ice cream? Yes I do! Do you like broccoli ice cream? No I don\'t! Do you like donuts? Yes I do! Do you like juice? Yes I do! Do you like donut juice? No I don\'t!'
+        };
+        var listeningTexts = {
+            '字母歌 / 数字歌': 'A B C D E F G, H I J K L M N O P, Q R S T U V, W X Y Z. Now I know my ABCs, next time won\'t you sing with me? One, two, three, four, five, six, seven, eight, nine, ten!',
+            '动物/食物 词汇音频': 'Apple, banana, cat, dog, elephant, fish, giraffe, horse, ice cream, juice, kite, lion, monkey, nose, orange, pig, queen, rabbit, snake, tiger, umbrella, violin, water, xylophone, yellow, zebra!',
+            '日常问候 短句': 'Good morning! How are you? I am fine, thank you. What is your name? My name is Sam. Nice to meet you. Good afternoon! Good evening! Good night! See you later!',
+            '简单对话 场景': 'Hello, what are you doing? I am playing with my toys. Can I play with you? Yes, let\'s play together. This is my favorite toy. It is a red car. Vroom vroom!',
+            '绘本故事 音频': 'Once upon a time, there was a little cat. The cat was very cute. It liked to play with a ball. One day, the cat went to the park. It saw a bird. The bird said hello. The cat said meow. They became friends.',
+            '科普/自然 听力': 'The sun is very big and bright. It gives us light and warmth. The moon is smaller and it shines at night. Stars are far away in the sky. Trees give us air. Water is very important for life.'
+        };
+
+        function playFullContent(title, type) {
+            if (window.speechSynthesis) {
+                window.speechSynthesis.cancel();
+            }
+            if (currentUtterance) {
+                currentUtterance = null;
+            }
+            var text = '';
+            if (type === 'song') {
+                text = songLyrics[title] || title + ' 是一首好听的英文儿歌，让我们一起来唱吧！';
+            } else if (type === 'listening') {
+                text = listeningTexts[title] || title + ' 是一个听力练习，让我们一起来听吧！';
+            } else {
+                text = title + ' 是一个有趣的动画，让我们一起来看吧！';
+            }
+            showModal(text);
+            var utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.7;
+            utterance.pitch = 1.1;
+            currentUtterance = utterance;
+            utterance.onend = function() {
+                currentUtterance = null;
+            };
+            utterance.onerror = function() {
+                currentUtterance = null;
+            };
+            window.speechSynthesis.speak(utterance);
+        }
+
+        var listeningPlan = [
+            { title: '字母歌 / 数字歌', level: '基础', time: '3min' },
+            { title: '动物/食物 词汇音频', level: '基础', time: '4min' },
+            { title: '日常问候 短句', level: '进阶', time: '4min' },
+            { title: '简单对话 场景', level: '进阶', time: '5min' },
+            { title: '绘本故事 音频', level: '高阶', time: '6min' },
+            { title: '科普/自然 听力', level: '高阶', time: '6min' }
+        ];
+        var songPlan = [
+            { title: 'Hello Hello!', level: '基础', time: '2min' },
+            { title: 'One Little Finger', level: '基础', time: '2min' },
+            { title: 'Walking Walking', level: '进阶', time: '2.5min' },
+            { title: 'If You\'re Happy', level: '进阶', time: '2.5min' },
+            { title: 'The Wheels on the Bus', level: '高阶', time: '3min' },
+            { title: 'Do You Like Broccoli?', level: '高阶', time: '3min' }
+        ];
+        var cartoonPlan = [
+            { title: 'Peppa Pig (基础集)', level: '基础', time: '5min' },
+            { title: 'Pocoyo (基础集)', level: '基础', time: '5min' },
+            { title: 'Octonauts (简单集)', level: '进阶', time: '7min' },
+            { title: 'The Lion Guard (片段)', level: '进阶', time: '7min' },
+            { title: 'Toy Story (短篇)', level: '高阶', time: '10min' },
+            { title: 'Dragon Tales (简单集)', level: '高阶', time: '10min' }
+        ];
+
+        function renderSchedule(containerId, plan, type) {
+            var container = document.getElementById(containerId);
+            if (!container) return;
+            container.innerHTML = '';
+            plan.forEach(function(item) {
+                var row = document.createElement('div');
+                row.className = 'schedule-row';
+                var levelClass = item.level === '基础' ? 'base' : item.level === '进阶' ? 'mid' : 'high';
+                row.innerHTML = '<span class="title" data-title="' + item.title + '" data-type="' + type + '">' + item.title + '</span><span class="level-badge ' + levelClass + '">' + item.level + '</span><span class="time">⏱️ ' + item.time + '</span>';
+                var titleSpan = row.querySelector('.title');
+                titleSpan.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    var title = this.dataset.title;
+                    var type = this.dataset.type;
+                    playFullContent(title, type);
+                });
+                container.appendChild(row);
+            });
+        }
+
+        renderSchedule('schedule-listening', listeningPlan, 'listening');
+        renderSchedule('schedule-songs', songPlan, 'song');
+        renderSchedule('schedule-cartoons', cartoonPlan, 'cartoon');
+
+        console.log('✅ 资源库已加载，字母发音已优化（移除"Chapital"前缀），点击欢迎遮罩后音频功能将激活。');
+    })();
+    </script>
+</body>
+</html>
