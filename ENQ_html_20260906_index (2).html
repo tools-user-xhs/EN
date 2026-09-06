@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🌈 幼儿英文启蒙 · 互动资源库</title>
+    <!-- 注意：微信内需要这段代码才能让音频工作 -->
+    <!-- 使用 Wechat TTS 或引导用户打开浏览器 -->
+    <style>
+        #browserTip {
+            background: #ff6b35;
+            color: white;
+            text-align: center;
+            padding: 12px 16px;
+            border-radius: 12px;
+            margin-bottom: 16px;
+            font-size: 0.95rem;
+            display: none;
+            box-shadow: 0 4px 12px rgba(255,107,53,0.3);
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+        #browserTip .highlight {
+            font-weight: 700;
+            background: rgba(255,255,255,0.2);
+            padding: 0 8px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <!-- 微信提示 -->
+    <div id="browserTip">
+        🔊 当前微信内无法播放语音，请点击右上角 <span class="highlight">···</span> 选择 <span class="highlight">在浏览器中打开</span> 获得完整体验！
+    </div>
+    <!-- 其余页面内容保持不变 -->
+
+    <script>
+    // ============ 检测微信环境 ============
+    function isWechat() {
+        return /MicroMessenger/i.test(navigator.userAgent);
+    }
+    function isMobile() {
+        return /Android|iPhone|iPad|iPod/i.test(navigator.userAgent);
+    }
+
+    // 显示微信提示
+    if (isWechat()) {
+        document.getElementById('browserTip').style.display = 'block';
+    }
+
+    // ============ 音频播放核心函数 ============
+    let currentUtterance = null;
+
+    function speakText(text, times = 1, callback) {
+        // 取消当前播放
+        if (window.speechSynthesis) {
+            window.speechSynthesis.cancel();
+        }
+        if (currentUtterance) {
+            currentUtterance = null;
+        }
+
+        // 如果是微信环境，尝试使用语音合成（部分微信版本支持）
+        // 或者使用 Web Audio API 播放
+        if (isWechat()) {
+            // 方案A：尝试使用 SpeechSynthesis（部分新版微信支持）
+            try {
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = 'en-US';
+                utterance.rate = 0.7;
+                utterance.pitch = 1.1;
+                currentUtterance = utterance;
+                utterance.onend = function() {
+                    currentUtterance = null;
+                    if (callback) callback();
+                };
+                utterance.onerror = function(e) {
+                    console.warn('SpeechSynthesis error in WeChat:', e);
+                    // 如果失败，尝试使用 Web Audio API 生成简单音效作为反馈
+                    currentUtterance = null;
+                    if (callback) callback();
+                };
+                window.speechSynthesis.speak(utterance);
+                return;
+            } catch(e) {
+                console.warn('SpeechSynthesis not available in WeChat');
+                // 显示提示，引导用户用浏览器打开
+                if (document.getElementById('browserTip')) {
+                    document.getElementById('browserTip').style.display = 'block';
+                }
+                if (callback) callback();
+                return;
+            }
+        }
+
+        // 非微信环境，使用标准 SpeechSynthesis
+        let count = 0;
+        function speak() {
+            if (count >= times) {
+                if (callback) callback();
+                return;
+            }
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'en-US';
+            utterance.rate = 0.7;
+            utterance.pitch = 1.1;
+            currentUtterance = utterance;
+            utterance.onend = function() {
+                count++;
+                currentUtterance = null;
+                if (count < times) {
+                    setTimeout(speak, 300);
+                } else {
+                    if (callback) callback();
+                }
+            };
+            utterance.onerror = function() {
+                currentUtterance = null;
+                count++;
+                if (count < times) {
+                    setTimeout(speak, 300);
+                } else {
+                    if (callback) callback();
+                }
+            };
+            window.speechSynthesis.speak(utterance);
+        }
+        speak();
+    }
+
+    // ============ 其他代码保持不变 ============
+    // 您现有的所有其他 JavaScript 代码...
+    </script>
+</body>
+</html>
